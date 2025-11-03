@@ -24,12 +24,12 @@ public class CentralAlarmas {
         subscriptores.stream().forEach(entidad -> entidad.recibirAlerta(alerta));
     }
 
-    public HashMap<Alerta, List<Entity>> getAlertasEnviadas() {
-        return alertasEnviadas;
-    }
-
     public Integer cantidadDeAlertasEnviadas() {
         return alertasEnviadas.size();
+    }
+
+    public void desuscribir(Entity entidad) {
+        this.subscriptores.remove(entidad);
     }
 
 }

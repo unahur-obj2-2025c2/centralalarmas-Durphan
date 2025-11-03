@@ -2,6 +2,7 @@ package ar.edu.unahur.obj2.observer.entidades;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Comparator;
 
 import ar.edu.unahur.obj2.alertas.Alerta;
 import ar.edu.unahur.obj2.observer.CentralAlarmas;
@@ -13,9 +14,12 @@ public class Entity {
     private List<Alerta> alertasRecibidas = new ArrayList<>();
     private ITipoRiesgo tipoRiesgo = RiesgoCritico.getInstancia();
 
-    public Entity(String name, ITipoRiesgo tipoRiesgo) {
+    public Entity(String name) {
         this.name = name;
-        this.tipoRiesgo = tipoRiesgo;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public List<Alerta> getAlertasRecibidas() {
@@ -30,16 +34,20 @@ public class Entity {
         return this.tipoRiesgo.factorDeRiesgo(this);
     }
 
-    public String getName() {
-        return name;
-    }
-
     public void setTipoRiesgo(ITipoRiesgo tipoRiesgo) {
         this.tipoRiesgo = tipoRiesgo;
     }
 
     public void suscribirse(CentralAlarmas central) {
         central.agregarSubscriptor(this);
+    }
+
+    public void responderAlerta() {
+
+        Alerta alertaMasPrioritaria = this.alertasRecibidas.stream()
+                .max(Comparator.comparing(Alerta::getNivel))
+                .orElse(null);
+        this.alertasRecibidas.remove(alertaMasPrioritaria);
     }
 
 }
